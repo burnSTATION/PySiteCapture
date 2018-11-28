@@ -18,6 +18,7 @@ async def get_auth_cookie(url):
 
     await page.goto(url)
     await page.waitFor('#user_login')
+    await page.waitFor(3000)
     await page.type('#user_login', config.auth['user'])
     await page.type('#user_pass', config.auth['pass'])
     await page.click('#wp-submit')
