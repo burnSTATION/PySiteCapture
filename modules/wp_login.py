@@ -11,16 +11,21 @@ Usage:
 """
 
 
-async def get_auth_cookie(url):
+async def get_auth_token(url, user):
     browser = await launch()
     page = await browser.newPage()
     nav_future = asyncio.ensure_future(page.waitForNavigation())
 
-    await page.goto(url)
+    print('INFO: Getting auth cookie for {} at {}...'.format(user['login'], url))
+    await page.goto(url + '/wp-login.php')
     await page.waitFor('#user_login')
-    await page.waitFor(3000)
-    await page.type('#user_login', config.auth['user'])
-    await page.type('#user_pass', config.auth['pass'])
+    await page.type('#user_login', user['login'])
+    await page.type('#user_pass', user['pass'])
     await page.click('#wp-submit')
     await nav_future
-    return page.cookies()
+    await page.waitFor('#wpcontent')
+    all_cookies = await page.cookies()
+    for cookie in all_cookies:
+        if cookie['name'][:20] == 'wordpress_logged_in_':
+            await browser.close()
+            return cookie
