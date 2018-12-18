@@ -15,7 +15,6 @@ async def get_auth_token(url, user):
     browser = await launch()
     page = await browser.newPage()
     nav_future = asyncio.ensure_future(page.waitForNavigation())
-
     print('INFO: Getting auth cookie for {} at {}...'.format(user['login'], url))
     await page.goto(url + '/wp-login.php')
     await page.waitFor('#user_login')
