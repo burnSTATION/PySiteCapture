@@ -107,4 +107,4 @@ loop.run_until_complete(setup())
 # Run all screenshot jobs
 loop.run_forever()
 
-# Do image comparison
+# Do image comparison using openCV
